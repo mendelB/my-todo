@@ -1,2 +1,30 @@
-<h1>Home#welcome</h1>
-<p>Find me in app/views/home/welcome.html.erb</p>
+<ul>
+  <% @tasks.each do |t| %>
+    <li>
+      <% if t.complete %>
+        <strike><%= check_box_tag :complete, t.id, t.complete, class: 'complete' %></strike>
+      <% else %>
+        <%= check_box_tag :complete, t.id, t.complete, class: 'complete' %>
+      <% end %>
+      <%= label_tag(t.task.title) %>
+    </li>
+    <% end %>
+</ul>
+
+<%= form_for UserTask.new do |f| %>
+  <%= f.collection_select :task_id, Task.all, :id, :title %>
+  <%= f.submit %>
+<% end %>
+
+<script type="text/javascript">
+  $('.complete').click(function(){
+    var id = this.value
+    var request = $.ajax({
+      url: "/user_tasks/" + id,
+      method: "PUT",
+      dataType: "json"
+    }).fail(function(data){
+      debugger
+    })
+  })
+</script>
