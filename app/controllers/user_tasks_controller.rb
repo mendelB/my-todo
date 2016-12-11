@@ -8,6 +8,7 @@ class UserTasksController < ApplicationController
   def update
     task = UserTask.find(params[:id])
     task.update(complete: !task.complete)
+    TaskMailer.mail_update.deliver
     head :ok
   end
 
